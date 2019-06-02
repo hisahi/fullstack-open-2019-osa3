@@ -5,6 +5,8 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
 
+const BASE_URL = '/api/persons'
+
 morgan.token('postjson', req => {
     if (req.method == "POST") {
         return JSON.stringify(req.body, null, 0)
@@ -12,6 +14,7 @@ morgan.token('postjson', req => {
     return ""
 })
 
+app.use(express.static('build'))
 app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :postjson'))
@@ -39,16 +42,15 @@ let data = [
     }
 ]
 
-
 app.get('/', (req, res) => {
     res.status(403).end()
 })
   
-app.get('/api/persons', (req, res) => {
+app.get(BASE_URL, (req, res) => {
     res.json(data)
 })
   
-app.get('/api/persons/:id', (req, res) => {
+app.get(BASE_URL + '/:id', (req, res) => {
     const id = Number(req.params.id)
     const contact = data.find(contact => contact.id === id)
 
@@ -59,7 +61,7 @@ app.get('/api/persons/:id', (req, res) => {
     }
 })
   
-app.post('/api/persons', (req, res) => {
+app.post(BASE_URL, (req, res) => {
     const contact = {...req.body}
     if (!contact.name || !contact.number) {
         return res.status(400).json({error: 'name or number missing'})
@@ -81,7 +83,7 @@ app.post('/api/persons', (req, res) => {
     res.json(contact)
 })
   
-app.delete('/api/persons/:id', (req, res) => {
+app.delete(BASE_URL + '/:id', (req, res) => {
     const id = Number(req.params.id)
     data = data.filter(contact => contact.id !== id)
     
@@ -94,7 +96,7 @@ app.get('/info', (req, res) => {
 ${new Date().toString()}`)
 })
   
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
