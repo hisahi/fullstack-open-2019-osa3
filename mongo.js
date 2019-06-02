@@ -1,8 +1,8 @@
 
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 if (process.argv.length < 3) {
-    console.log('give password as argument')
+    console.log("give password as argument")
     process.exit(1)
 }
 
@@ -10,7 +10,7 @@ const contactScheme = new mongoose.Schema({
     name: String,
     number: String
 })
-const Contact = mongoose.model('Contact', contactScheme)
+const Contact = mongoose.model("Contact", contactScheme)
 
 const password = process.argv[2]
 const url =
@@ -28,10 +28,10 @@ if (process.argv.length < 5) {
     })
 
 } else {
-    const name = process.argv[3];
-    const number = process.argv[4];
+    const name = process.argv[3]
+    const number = process.argv[4]
 
-    const contact = new Contact({name: name, number: number})
+    const contact = new Contact({ name: name, number: number })
     console.log(`lisätään ${name} numero ${number} luetteloon`)
 
     contact.save().then(result => {

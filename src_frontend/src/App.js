@@ -89,7 +89,7 @@ const App = () => {
       setNewNumber('')
       displayMessage('message-success', `Added ${data.name}`)
     }, err => {
-      displayMessage('message-error', `${newPerson.name} could not be added`)
+      displayMessage('message-error', err.response.data.error)
       fetchAndUpdate()
     })
   }
